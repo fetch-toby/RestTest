@@ -1,19 +1,25 @@
-import api.RestApiImpl;
+import api.PerfectNumberApiImpl;
+import api.StatusApiImpl;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
-
-import java.net.URISyntaxException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class RestMain {
-    public static void main(String[] args) throws URISyntaxException {
+    private static final Logger LOGGER = LogManager.getLogger(RestMain.class.getName());
+
+    public static void main(String[] args) {
+        LOGGER.info("Starting RestTest application!");
         String endpoint = "http://0.0.0.0:8080";
         startServer(endpoint);
     }
 
     public static Server startServer(final String endpoint) {
-        final RestApiImpl rest = new RestApiImpl();
+        final StatusApiImpl status = new StatusApiImpl();
+        final PerfectNumberApiImpl perf = new PerfectNumberApiImpl();
         final JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
-        sf.setServiceBean(rest);
+        sf.setServiceBean(status);
+        sf.setServiceBean(perf);
         sf.setAddress(endpoint);
 
         return sf.create();
